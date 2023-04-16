@@ -7,6 +7,8 @@ import checkUserAuth from "../middlewares/auth-middleware.js";
 router.post("/login", UserController.userLogin);
 
 //private route
-router.get("/isLogin",checkUserAuth,UserController.isLogin);
+router.get("/isLogin", checkUserAuth, UserController.isLogin);
+
+router.get("/logout",UserController.logout);
 
 export default router;

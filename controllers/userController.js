@@ -43,7 +43,8 @@ import Jwt  from "jsonwebtoken";
       // Handle generic error
       res.status(500).send({ "status": "error", "message": "Internal server error", "error": error.toString(), data: null });
   }
-   }
+   
+  }
 
 
    //isLogin
@@ -56,7 +57,9 @@ import Jwt  from "jsonwebtoken";
       if (user) {
         const data = { userID: user._id, email: user.email, name: user.name }
         const token = Jwt.sign(data,
-        process.env.JWT_SECRET_KEY, { expiresIn: "5d" })
+          process.env.JWT_SECRET_KEY, { expiresIn: "5d" })
+         // Set JWT token as a cookie
+        res.cookie('token', token, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
         return res.status(200).json({ status: 'success', message: 'Login successful', data: {name:user.name,token:token}}); 
       }
       else {
@@ -67,7 +70,16 @@ import Jwt  from "jsonwebtoken";
     catch (error) {
       res.status(500).send({ "status": "error", "message": "Internal server error", "error": error.toString(), data: null });
   }
-}
+   }
+   
+   
+   //logout
+   static logout = async (req, res) => {
+     // Clear the token cookie
+    res.clearCookie('token');
+    // Return success response
+    res.status(200).json({ message: 'Logout successful' });
+   }
   
   
    
